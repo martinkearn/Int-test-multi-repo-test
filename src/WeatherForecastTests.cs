@@ -1,12 +1,33 @@
-﻿namespace BasicTest;
+﻿using Microsoft.Extensions.Configuration;
+
+namespace BasicTest;
 
 public class WeatherForecastTests
 {
+    public readonly IConfiguration _config;
+
+    public WeatherForecastTests(IConfiguration config)
+    {
+        _config = config;
+    }
+
+    [Fact]
+    public void CanReadEnvVars()
+    {
+        // Arrange
+        var sutUri = Environment.GetEnvironmentVariable("SutUriBase");
+
+        // Assert
+        Assert.NotEmpty(sutUri);
+    }
+
+
     [Fact]
     public async Task WeatherForecastReturnsOK()
     {
+        var sutUri = Environment.GetEnvironmentVariable("SutUriBase");
         var client = new HttpClient();
-        var response = await client.GetAsync("http://localhost:9012/weatherforecast");
+        var response = await client.GetAsync($"{sutUri}/weatherforecast");
         Assert.Equal(System.Net.HttpStatusCode.OK, response.StatusCode);
     }
 }
