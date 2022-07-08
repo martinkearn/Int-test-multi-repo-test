@@ -15,7 +15,7 @@ public class WeatherForecastTests
     public void CanReadEnvVars()
     {
         // Arrange
-        var sutUri = Environment.GetEnvironmentVariable("SutUriBase");
+        var sutUri = _config.GetValue<string>("SutUriBase");
 
         // Assert
         Assert.NotEmpty(sutUri);
@@ -25,7 +25,7 @@ public class WeatherForecastTests
     [Fact]
     public async Task WeatherForecastReturnsOK()
     {
-        var sutUri = Environment.GetEnvironmentVariable("SutUriBase");
+        var sutUri = _config.GetValue<string>("SutUriBase");
         var client = new HttpClient();
         var response = await client.GetAsync($"{sutUri}/weatherforecast");
         Assert.Equal(System.Net.HttpStatusCode.OK, response.StatusCode);
